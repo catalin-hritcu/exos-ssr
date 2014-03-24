@@ -1,0 +1,33 @@
+* 1. Introduction
+- representation matters
+  - case analysis, computation
+  - even simple symbolic representations useful:
+    e.g. truth tables for booleans
+- 3 kinds of steps:
+  - deduction (top-down/forwards or bottom-up/backwards)
+    + reflection
+      - switches between logical and symbolic representation
+      - just another kind of deduction step
+  - bookkeeping
+    + introduce, rename, discharge, split cases
+  - rewriting
+    + passing unknown parameters, equational reasoning,
+      switching representations
+- in ssr style these three kinds of steps are interleaved
+- basic Coq not well suited for ssr proofs:
+  - biased towards backwards steps
+    + little support for fwd steps or proof layout (bullets)
+  - basic tactics implement fragile context manipulation heuristics
+    which hinder precise bookkeeping
+  - intro patterns generally under-utilized
+- ssr features:
+  + small-scale reflection itself
+  + term selection
+  + enhanced rewriting
+  + robustness of scripts
+- sections 2-3 on ssr itself
+- section 4-5 on libraries (mathematical components)
+  + design patterns (objects and theories on objects)
+  + type classes, canonical structures
+  + here focused on finite objects
+

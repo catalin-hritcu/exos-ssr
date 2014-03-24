@@ -20,15 +20,15 @@ Variables A B C : Prop.
 
 (* The exact tactic takes its argument on top of the goal stack *)
 Lemma tauto1 : A -> A.
-Admitted.
+Proof. done. Qed.
 
 (* exact: hAB behaves like (by apply: hAB) and hence finds the hypothesis A
 in the context needed to solve the goal *)
 Lemma tauto2 : (A -> B) -> (B -> C) -> A -> C.
-Admitted.
+Proof. move=> ab bc a. apply: bc. apply: ab. exact a. Qed.
 
 Lemma tauto3 : A /\ B <-> B /\ A.
-Admitted.
+Proof. by split=>H; elim: H=> H1 H2. Qed.
   
 End Tauto.
 
@@ -42,10 +42,15 @@ Variables A B C : Prop.
 Variable P : nat -> Prop.
 
 Lemma foo1 : ~(exists x, P x) -> forall x, ~P x.
-Admitted.
+Proof.
+  move=>Hnex x HP. apply: Hnex. by exists x.
+Qed.
 
 Lemma foo2 : (exists x, A -> P x) -> (forall x, ~P x) -> ~A.
-Admitted.
+Proof.
+  case=>x Hx HPx HA. apply: (HPx x). by apply Hx.
+Qed.
+
 End MoreBasics.
 
 (******************************************************************************)
@@ -67,31 +72,37 @@ Print leq.
 
 Search "_ < _".
 
-(* Both cases gereated by the induction lead to trivial goals *)
 Lemma tuto_subnn : forall n : nat, n - n = 0.
-Admitted.
+Proof.
+  by elim=>[|n' IH].
+Qed.
   
-(* This proof is an induction on m, followed by a case  analysis on *)
-(* the second n. Base case is trivial (hence discarded by the // *)
-(* switch. *)
 Lemma tuto_subn_gt0 : forall m n, (0 < n - m) = (m < n).
-Admitted.
+Proof.
+  elim => [| m' IHm] [| n'] //. exact: IHm.
+Qed.
 
-
-(* This proof starts the same way as the one of subn_gt0. *)
-(* Then two rewriting are chained to reach to trivial subgoals *)
+(* XXX started feeling a bit lost *)
 Lemma tuto_subnKC : forall m n : nat, m <= n -> m + (n - m) = n.
-Admitted.
-  
-(* The first Search command suggests we need to use something like *)
-(*subn_add2r, hence to transform n into n - p + p *)
-(* The second Search command finds the appropriate lemma. We rewrite *)
-(*it from right to left, only at the second occurrence of n, the *)
-(*condition of the lemma is fullfilled thanks to the le_pn hypothesis, *)
-(*hence the generated subgoal is closed by the // switch *)
+Proof.
+  elim => [| m' IHm] [| n'] H //. (* unfold subn, addn => /=. *)
+  Search _ (_.+1 + _ = _.+1).
+  rewrite addSn. by rewrite IHm.
+Qed.
 
+(* XXX started feeling completely lost;
+   - natural subtraction is anything but intuitive
+   - even if I were given all the needed lemmas,
+     I would still not know how to apply them *)
 Lemma tuto_subn_subA : forall m n p, p <= n -> m - (n - p) = m + p - n.
-Admitted.
+Proof.
+  move => m n p h.
+  (* peaked to get to these *)
+  Check subnK. Check subn_add2r.
+  (* they didn't explain rewrite, and selectors yet! *)
+  have magic := subnK h.
+  rewrite -{2}magic. by rewrite subn_add2r.  
+Qed.
 
 (******************************************************************************)
 (* Exercise 3.5.1                                                             *)
@@ -112,6 +123,27 @@ Print edivn_spec.
 (*but does not generate an induction principle, which would be is *)
 (*useless in this case. *)
 
+(* XXX Their crappy lemma -- proof doesn't even work till the end *)
+Lemma edivnP : forall m d, edivn_spec m d (edivn m d).
+Proof.
+  move => m. rewrite /edivn. move => [| d] /=; first done.
+  rewrite -{1}[m]/(0*d.+1 + m). Check (leqnn m).
+  (* this is really magic *)
+  elim: m {-2}m 0 (leqnn m) => [| n IHn] [|m] q //=; [];
+    rewrite ltnS => le_mn. Check subn_if_gt.
+  rewrite subn_if_gt. case: (ltnP m d) => [// | le_dm].
+  specialize (IHn (m - d) (q.+1)).
+  rewrite mulSnr in IHn.
+  rewrite -addnA in IHn.
+  rewrite (addSn d) in IHn.
+  rewrite subnKC in IHn; last done. apply IHn.
+  apply: leq_trans le_mn; exact: leq_subr.
+(* their proof works shit:
+  Check subnK le_dm. Check addSn.
+  rewrite -{1}(subnK le_dm). rewrite -addSn. rewrite addnA. 
+  Check mulSnr.
+  apply IHn.
+*)
 
 (******************************************************************************)
 (* Exercise 3.5.2                                                             *)
@@ -177,10 +209,7 @@ Print ltn_xor_geq.
 (*every occurrence of (n <= m) and (m < n) is replaced by the value *)
 (*imposed by the ltn_xor_gep constructor used in the branch.*)
 
-CoInductive tuto_compare_nat (m n : nat) : bool -> bool -> bool -> Set :=
-  | TCompareNatLt of m < n : tuto_compare_nat m n true false false
-  | TCompareNatGt of m > n : tuto_compare_nat m n false true false
-  | TCompareNatEq of m = n : tuto_compare_nat m n false false true.
+CoInductive tuto_compare_nat (m n : nat) : bool -> bool -> bool -> Set :=.
 
 (* Let's check against what is defined in the ssrnat library *)
 Print compare_nat.

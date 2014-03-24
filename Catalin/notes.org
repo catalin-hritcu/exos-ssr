@@ -31,3 +31,61 @@
   + type classes, canonical structures
   + here focused on finite objects
 
+* 3. Script language
+** Bookkeeping
+- intros: move=> x H
+- discharge (generalize dependent): move: x H
+- case, elim, apply redefined to work only on goal
+  + use ":" to make them work on variable in context: elim: n
+- induction on compound thing: elim: (expr)
+- branching version of => [..|..] allows to name things in subgoals
+- renaming n into m: move: n => m
+** Terminator exercises
+- simpl doesn't work at all so can't see why various things unify
+  + most ssr functions (addn, subn, etc) are opaque on purpose
+    so they don't reduce unless explicitly unfolded
+  + in fact it's even worse; even if you were to explicitly unfold
+    them and compute with them, you would very often get expressions
+    mentioning again unfolded operators, which don't unify with
+    non-unfolded ones
+- notation gets a bit in the way
+  + or maybe just some time to get used to
+  + the precedence of .+1 is a mystery, probably binds very tight 
+- not all ingredients needed for solving the exercises were introduced
+  in advance
+  + assuming some familiarity with this style of proofs, all-powerful
+    lemmas from the libraries, etc. -- completely lost without that
+** Goal Selectors
+- Q: any way to ensure that a tactic produces exactly n subgoals and
+  to fail otherwise [||||..]?
+  + without this all this goal selection stuff seems *super* fragile
+** Forward chaining
+- assert: have: P
+  + where : here is not the discharge : right?
+- pose: have := proof term
+- wildcard mechanism / magic
+  + single universally quantified variable only
+- revert have: suff
+- without loss of generality: wlog
+  + they say it's useful for exploiting symmetries in the proof
+  + looks cool, but I still need to wrap my head around it
+** Omitted from tutorial (all useful stuffm should still check it out)
+- subterm selection
+- enhanced rewrite tactic 
+- more complex intro and discharge patterns
+** More complaints
+- they prove entire lemmas in tactics without showing one single proof
+  goal; and their code is not available, and copy-paste doesn't work;
+  so it's basically impossible to animate and understand the proof
+  + quo_rem_unicity, edivnP
+- stuff like // and //= is super fragile!
+  + how does one know how many goals there are
+** Idea
+- how about a tactic language in which each non-trivial goal split is
+  explicitly marked with it's arity?
+** General induction
+- very interesting
+- not defining strong induction principles, because there are too
+  many possible ones
+- instead using elim + generalization patterns + occurrence selection
+  + I don't know *any* of these things, what are they talking about?

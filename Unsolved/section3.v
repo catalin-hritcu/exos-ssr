@@ -177,10 +177,7 @@ Print ltn_xor_geq.
 (*every occurrence of (n <= m) and (m < n) is replaced by the value *)
 (*imposed by the ltn_xor_gep constructor used in the branch.*)
 
-CoInductive tuto_compare_nat (m n : nat) : bool -> bool -> bool -> Set :=
-  | TCompareNatLt of m < n : tuto_compare_nat m n true false false
-  | TCompareNatGt of m > n : tuto_compare_nat m n false true false
-  | TCompareNatEq of m = n : tuto_compare_nat m n false false true.
+CoInductive tuto_compare_nat (m n : nat) : bool -> bool -> bool -> Set :=.
 
 (* Let's check against what is defined in the ssrnat library *)
 Print compare_nat.

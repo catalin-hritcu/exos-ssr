@@ -2,7 +2,7 @@
 (* Solutions of exercises : Appendix                                          *)
 (******************************************************************************)
 
-Require Import ssreflect ssrfun ssrbool eqtype ssrnat seq paths.
+Require Import ssreflect ssrfun ssrbool eqtype ssrnat seq path.
 Require Import choice fintype tuple finset.
 
 Set Implicit Arguments.

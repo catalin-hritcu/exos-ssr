@@ -1,0 +1,8 @@
+Exos/part1.v
+Exos/part2.v
+Exos/part3.v
+OnLineExos/section3.v
+OnLineExos/section4.v
+OnLineExos/section5.v
+#OnLineExos/section6.v - type error for "Sub 2 (ltnSn 3)", line 456
+OnLineExos/section7.v

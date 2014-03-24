@@ -3,7 +3,7 @@
 (******************************************************************************)
 
 Require Import ssreflect ssrfun ssrbool eqtype ssrnat div seq.
-Require Import paths choice fintype tuple finset.
+Require Import path choice fintype tuple finset.
 
 Set Implicit Arguments.
 Unset Strict Implicit.

@@ -42,11 +42,7 @@ Variables A B C : Prop.
 Variable P : nat -> Prop.
 
 Lemma foo1 : ~(exists x, P x) -> forall x, ~P x.
-move=> h x Px.
-apply: h.
-by exists x.
-Qed.
-
+Admitted.
 
 Lemma foo2 : (exists x, A -> P x) -> (forall x, ~P x) -> ~A.
 Admitted.

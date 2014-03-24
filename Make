@@ -1,12 +1,12 @@
 Unsolved/section3.v
 Unsolved/section4.v
 Unsolved/section5.v
-Unsolved/section6.v
+#Unsolved/section6.v - type error for "Sub 2 (ltnSn 3)", line 369
 Unsolved/section7.v
 Catalin/section3.v
 Catalin/section4.v
 Catalin/section5.v
-Catalin/section6.v
+#Catalin/section6.v - type error for "Sub 2 (ltnSn 3)", line 369
 Catalin/section7.v
 Exos/part1.v
 Exos/part2.v

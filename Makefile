@@ -98,7 +98,15 @@ PP:=-pp "$(CAMLP4BIN)$(CAMLP4)o -I $(CAMLLIB) -I . $(COQSRCLIBS) $(CAMLP4EXTEND)
 #                                 #
 ###################################
 
-VFILES:=Exos/part1.v\
+VFILES:=Unsolved/section3.v\
+  Unsolved/section4.v\
+  Unsolved/section5.v\
+  Unsolved/section7.v\
+  Catalin/section3.v\
+  Catalin/section4.v\
+  Catalin/section5.v\
+  Catalin/section7.v\
+  Exos/part1.v\
   Exos/part2.v\
   Exos/part3.v\
   OnLineExos/section3.v\

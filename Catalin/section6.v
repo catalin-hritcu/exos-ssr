@@ -251,15 +251,7 @@ Definition Fmax := odflt i0 [pick x | is_max x].
 (*to a proof that a nat predicates is non empty generates the value *)
 (*and its minimality property *)
 Lemma Fmin_correct : extremum_spec leq Fmin.
-rewrite /Fmin; case: pickP => [i | no_i] /=.
-  by case/andP=> Pi; move/forallP=> min_i; split=> // j; exact/implyP.
-pose Fvals i := existsb x, P x && (F x == i).
-have exFval : exists n, Fvals n.
-  by exists (F i0); rewrite /Fvals; apply/existsP; exists i0; rewrite Pi0 eqxx.
-case/ex_minnP: exFval=> m; case/existsP=> j; case/andP=> Pj e m_is_min.
-case/idP: (no_i j); rewrite /= Pj; apply/forallP=> x; apply/implyP=> Px.
-by rewrite (eqP e); apply: m_is_min; apply/existsP; exists x; rewrite eqxx Px.
-Qed.
+Admitted.
 
 (* here we need to show that F is bounded on T. In fact, the explicit *)
 (* value of the maximum of F on the whole finType T can be computed by *)

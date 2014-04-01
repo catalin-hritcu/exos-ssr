@@ -15,5 +15,6 @@ Directories:
 - Catalin - my solutions, comments, and notes
 
 The solutions are known to work with Coq 8.3pl4 and SSReflect 1.3.
-They don't work with the latest variants of Coq and SSReflect,
-but shouldn't be too hard to port.
+They don't work with the latest versions of Coq and SSReflect,
+but would probably not be too hard to port for someone who
+already learned SSReflect.

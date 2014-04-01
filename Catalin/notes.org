@@ -95,8 +95,15 @@ TODO: all useful stuff; should still check it out at some point
   many possible ones
 - instead using elim + generalization patterns + occurrence selection
   + I don't know *any* of these things, what are they talking about?
-** Question
-- How to clear hypotheses that are no longer useful?
+** Silly question
+- How to clear hypotheses that are no longer useful? clear?
 ** Lemma ltn_xor_geq and Exercise tuto_ltngtP
 - This seems like a common pattern in SSReflect
   + not sure how it's called, but Maxime was also using it
+* 4. Small-Scale Reflection
+** WTF is a view?
+Seems like super boring stuff
+** Why does reflection help in any way?
+It seems it helps when used with view lemmas (e.g. involving reflect)
+** Arthur: mixing proof terms inside terms causes bad reduction
+- experienced this with both _dec lemmas and sigma types

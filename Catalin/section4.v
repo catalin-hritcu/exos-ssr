@@ -14,36 +14,38 @@ Import Prenex Implicits.
 (* Exercise 4.1.1                                                             *)
 (******************************************************************************)
 
-(* The proof goes by case analysis on the truth table, applying the *)
-(*appropriate constructor of the reflect predicate in every meaningful *)
-(*case. The other case ask a proof of False in a conctext where False *)
-(*can be obtained as a hypothesis after destructing a conjunction (the *)
-(*last case tactic) *)
-
 Lemma tuto_andP : forall b1 b2 : bool, reflect (b1 /\ b2) (b1 && b2).
-Admitted.
-
-(* Again this lemma is a macro for a cacse analysis on the truth table *)
-(*of b1 b2 and (b1 || b2) *)
+Proof.
+move => b1 b2. case b1; case b2; constructor; first (split; reflexivity);
+  move => [H1 H2]; congruence. 
+Qed. Print tuto_andP.
 
 Lemma tuto_orP : forall b1 b2 : bool, reflect (b1 \/ b2) (b1 || b2).
-Admitted.
+move => b1 b2. case b1; case b2; constructor; last (move => [Hc|Hc]; congruence);
+  have: true by []; tauto.
+Qed.
 
 (******************************************************************************)
 (* Exercise 4.1.2                                                             *)
 (******************************************************************************)
 
-(* The first solution follows the hint given in the tutorial. In fact *)
-(* it is sufficient to perform case analysis on the constructor of the *)
-(*reflect hypothesis as done in the second solution. *)
+Check iffP.
+
 Lemma tuto_iffP : forall (P Q : Prop) (b : bool),
-      reflect P b -> (P -> Q) -> (Q -> P) -> reflect Q b.
-Admitted.
+  reflect P b -> (P -> Q) -> (Q -> P) -> reflect Q b.
+Proof.
+  move => P Q b. case b => R PQ QP.
+  constructor. apply PQ. by apply /R.
+  case R; try tauto. admit.
+  move => HnP. 
+Abort. (* this was an unclear hint ... supposed to fail? *)
 
+Lemma tuto_iffP : forall (P Q : Prop) (b : bool),
+  reflect P b -> (P -> Q) -> (Q -> P) -> reflect Q b.
+Proof.
+  move => P Q b. case => [HP | HnP] PQ QP; constructor; auto.
+Qed.
 
-Lemma alternate_tuto_iffP : forall (P Q : Prop) (b : bool),
-      reflect P b -> (P -> Q) -> (Q -> P) -> reflect Q b.
-Admitted.
 
 (******************************************************************************)
 (* Exercise 4.2.1                                                             *)

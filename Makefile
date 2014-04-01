@@ -103,7 +103,9 @@ VFILES:=Unsolved/section3.v\
   Unsolved/section5.v\
   Unsolved/section7.v\
   Catalin/section3.v\
+  Catalin/try3.v\
   Catalin/section4.v\
+  Catalin/try4.v\
   Catalin/section5.v\
   Catalin/section7.v\
   Exos/part1.v\

@@ -234,16 +234,4 @@ Proof.
 Qed.
 
 Goal forall x y z, x < y \/ x == y \/ x < z.
-Proof. move => x y z. case (tuto_ltngtP x y). admit.
-
-(*
-Definition True1 := True.
-Definition True2 := True.
-Definition True3 := True.
-
-Lemma xxx : True1 /\ True2 /\ True3.
-Proof.
-  split; [| split]; first apply I.
-
-  repeat constructor.
-*)
+Proof. move => x y z. case (tuto_ltngtP x y). Abort.

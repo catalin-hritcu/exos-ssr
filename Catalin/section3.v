@@ -123,27 +123,28 @@ Print edivn_spec.
 (*but does not generate an induction principle, which would be is *)
 (*useless in this case. *)
 
-(* XXX Their crappy lemma -- proof doesn't even work till the end *)
+(* XXX Their example lemma from the paper *)
 Lemma edivnP : forall m d, edivn_spec m d (edivn m d).
 Proof.
   move => m. rewrite /edivn. move => [| d] /=; first done.
-  rewrite -{1}[m]/(0*d.+1 + m). Check (leqnn m).
-  (* this is really magic *)
-  elim: m {-2}m 0 (leqnn m) => [| n IHn] [|m] q //=; [];
-    rewrite ltnS => le_mn. Check subn_if_gt.
-  rewrite subn_if_gt. case: (ltnP m d) => [// | le_dm].
-  specialize (IHn (m - d) (q.+1)).
-  rewrite mulSnr in IHn.
-  rewrite -addnA in IHn.
-  rewrite (addSn d) in IHn.
-  rewrite subnKC in IHn; last done. apply IHn.
+  rewrite -{1}[m]/(0*d.+1 + m).
+  (* this is really black magic: *)
+     (* elim: m {-2}m 0 (leqnn m) => [| n IHn] [|m] q //=. *)
+  (* Step by step ... *)
+  move : (leqnn m). (* generalization *)
+  move : 0. (* generalization *)
+  move : {-2}m. (* generalization; other than the 2nd instance, in m <= m *)
+  elim: m; (* induction *)
+    last move => n IHn; (* intro *)
+    move => [| m]; (* destruct *)
+    move => q; (* intro *)
+    move => /=; (* simplification *)
+    [done | done | done | ].
+  rewrite ltnS => le_mn.
+  rewrite subn_if_gt. case: (ltnP m d) => [/= | le_dm]; [done | ].
+  rewrite -{1}(subnKC le_dm) -addSn addnA -mulSnr; apply IHn.
   apply: leq_trans le_mn; exact: leq_subr.
-(* their proof works shit:
-  Check subnK le_dm. Check addSn.
-  rewrite -{1}(subnK le_dm). rewrite -addSn. rewrite addnA. 
-  Check mulSnr.
-  apply IHn.
-*)
+Qed.
 
 (******************************************************************************)
 (* Exercise 3.5.2                                                             *)
@@ -183,7 +184,7 @@ Proof.
 (*occurrence of the comparison is not the one the user whould like to *)
 (*pick as support for ase analysis. *)
 
-Check ltnP.
+Check ltnP. Print ltnP.
 Print ltn_xor_geq.
 
 (* For any two natural numbers n and m, (ltn_xor_geq m n) is a binary *)
@@ -209,14 +210,40 @@ Print ltn_xor_geq.
 (*every occurrence of (n <= m) and (m < n) is replaced by the value *)
 (*imposed by the ltn_xor_gep constructor used in the branch.*)
 
-CoInductive tuto_compare_nat (m n : nat) : bool -> bool -> bool -> Set :=.
+CoInductive tuto_compare_nat (m n : nat) : bool -> bool -> bool -> Set :=
+| C1 : m < n  -> tuto_compare_nat m n true false false
+| C2 : n < m  -> tuto_compare_nat m n false true false
+| C3 : m == n -> tuto_compare_nat m n false false true.
 
 (* Let's check against what is defined in the ssrnat library *)
 Print compare_nat.
 
+Check ltnP. Print leqP.
+
+Lemma ltSS : forall m n, (m.+1 < n.+1) = (m < n).
+Proof. done. Qed.
+
+Lemma eqSS : forall m n, (m.+1 == n.+1) = (m == n).
+Proof. done. Qed.
+
 Lemma tuto_ltngtP : forall m n, compare_nat m n (m < n) (n < m) (m == n).
-Admitted.
+Proof.
+  elim => [| m' IH]; case => [| n'].
+    by apply CompareNatEq. by apply CompareNatLt. by apply CompareNatGt.
+  rewrite !ltSS eqSS. case (IH n') => H; by constructor; auto.
+Qed.
 
+Goal forall x y z, x < y \/ x == y \/ x < z.
+Proof. move => x y z. case (tuto_ltngtP x y). admit.
 
+(*
+Definition True1 := True.
+Definition True2 := True.
+Definition True3 := True.
 
+Lemma xxx : True1 /\ True2 /\ True3.
+Proof.
+  split; [| split]; first apply I.
 
+  repeat constructor.
+*)

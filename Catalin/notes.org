@@ -5,15 +5,15 @@
     e.g. truth tables for booleans
 - 3 kinds of steps:
   - deduction (top-down/forwards or bottom-up/backwards)
-    + reflection
+    + an important instance: reflection
       - switches between logical and symbolic representation
-      - just another kind of deduction step
   - bookkeeping
     + introduce, rename, discharge, split cases
   - rewriting
     + passing unknown parameters, equational reasoning,
       switching representations
-- in ssr style these three kinds of steps are interleaved
+- in "ssr style" these three kinds of steps are interleaved
+  and appear in roughly equal amounts
 - basic Coq not well suited for ssr proofs:
   - biased towards backwards steps
     + little support for fwd steps or proof layout (bullets)
@@ -31,12 +31,13 @@
   + type classes, canonical structures
   + here focused on finite objects
 
-* 3. Script language
+* 3. Proof Script language
 ** Bookkeeping
 - intros: move=> x H
-- discharge (generalize dependent): move: x H
+- discharge ("generalize dependent"): move: x H
 - case, elim, apply redefined to work only on goal
   + use ":" to make them work on variable in context: elim: n
+  + elim is really like induction
 - induction on compound thing: elim: (expr)
 - branching version of => [..|..] allows to name things in subgoals
 - renaming n into m: move: n => m
@@ -61,25 +62,30 @@
   + without this all this goal selection stuff seems *super* fragile
 ** Forward chaining
 - assert: have: P
-  + where : here is not the discharge : right?
+  + where : here is not the discharge ":"
 - pose: have := proof term
 - wildcard mechanism / magic
   + single universally quantified variable only
 - revert have: suff
 - without loss of generality: wlog
-  + they say it's useful for exploiting symmetries in the proof
-  + looks cool, but I still need to wrap my head around it
-** Omitted from tutorial (all useful stuffm should still check it out)
+  + seems useful for exploiting symmetries in math proofs
+  + not sure it would apply to symmetries in PL proofs
+** Omitted from tutorial
+TODO: all useful stuff; should still check it out at some point
 - subterm selection
 - enhanced rewrite tactic 
 - more complex intro and discharge patterns
 ** More complaints
 - they prove entire lemmas in tactics without showing one single proof
-  goal; and their code is not available, and copy-paste doesn't work;
-  so it's basically impossible to animate and understand the proof
+  goal; so it's basically impossible to understand the proof without
+  animating it
   + quo_rem_unicity, edivnP
 - stuff like // and //= is super fragile!
   + how does one know how many goals there are
+- this seems tailored at making all proof steps as explicit as possible
+  + as opposed to automating as much as possible for instance
+  + could it be that in math proofs there are more interesting steps
+    than in PL proofs?
 ** Idea
 - how about a tactic language in which each non-trivial goal split is
   explicitly marked with it's arity?
@@ -89,3 +95,8 @@
   many possible ones
 - instead using elim + generalization patterns + occurrence selection
   + I don't know *any* of these things, what are they talking about?
+** Question
+- How to clear hypotheses that are no longer useful?
+** Lemma ltn_xor_geq and Exercise tuto_ltngtP
+- This seems like a common pattern in SSReflect
+  + not sure how it's called, but Maxime was also using it
